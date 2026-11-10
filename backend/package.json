@@ -1,0 +1,26 @@
+{
+  "name": "university-management-backend",
+  "version": "1.0.0",
+  "description": "University Management System backend API built with Node.js, Express.js, and MySQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "university-management",
+    "express",
+    "mysql2",
+    "dbms"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.11.3"
+  }
+}
+

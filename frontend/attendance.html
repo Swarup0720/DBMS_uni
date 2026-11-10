@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance Management | University Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="erp-shell">
+    <aside class="erp-sidebar" id="erpSidebar"></aside>
+    <div class="erp-backdrop" id="erpBackdrop"></div>
+    <div class="erp-main">
+      <header class="erp-topbar" id="erpTopbar"></header>
+      <main class="erp-content">
+        <ul class="nav nav-pills mb-4 no-print gap-2" id="attendanceTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-mark-btn" data-bs-toggle="pill" data-bs-target="#tabMark" type="button">
+              <i class="bi bi-check2-square me-1"></i> Mark / Update Attendance
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-records-btn" data-bs-toggle="pill" data-bs-target="#tabRecords" type="button">
+              <i class="bi bi-list-ul me-1"></i> Attendance Records
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-report-btn" data-bs-toggle="pill" data-bs-target="#tabReport" type="button">
+              <i class="bi bi-bar-chart-line me-1"></i> Percentage &amp; Reports
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Tab 1: Mark Attendance -->
+          <div class="tab-pane fade show active" id="tabMark" role="tabpanel">
+            <div class="erp-card p-3 mb-4">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                  <label for="markDeptSelect" class="form-label small fw-semibold mb-1">Department</label>
+                  <select id="markDeptSelect" class="form-select"></select>
+                </div>
+                <div class="col-md-2">
+                  <label for="markSemSelect" class="form-label small fw-semibold mb-1">Semester</label>
+                  <select id="markSemSelect" class="form-select">
+                    <option value="1">Sem 1</option>
+                    <option value="2">Sem 2</option>
+                    <option value="3">Sem 3</option>
+                    <option value="4" selected>Sem 4</option>
+                    <option value="5">Sem 5</option>
+                    <option value="6">Sem 6</option>
+                    <option value="7">Sem 7</option>
+                    <option value="8">Sem 8</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="markDateInput" class="form-label small fw-semibold mb-1">Date</label>
+                  <input type="date" id="markDateInput" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label for="markSessionInput" class="form-label small fw-semibold mb-1">Class / Session</label>
+                  <input type="text" id="markSessionInput" class="form-control" value="Regular Class" maxlength="80" placeholder="e.g. DBMS Lecture" />
+                </div>
+                <div class="col-md-2 d-grid">
+                  <button type="button" class="btn btn-primary-ums" id="loadRosterBtn">
+                    <i class="bi bi-people me-1"></i> Load Students
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="erp-card">
+              <div class="erp-card-header">
+                <div>
+                  <h2 class="erp-card-title">Class Roster</h2>
+                  <div class="small text-muted" id="rosterHint">Select department, semester, date, and session to load students.</div>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="button" class="btn btn-sm btn-outline-success" id="markAllPresentBtn" disabled>
+                    Mark All Present
+                  </button>
+                  <button type="button" class="btn btn-sm btn-primary-ums" id="saveAttendanceBtn" disabled>
+                    <i class="bi bi-save me-1"></i> Save Attendance
+                  </button>
+                  <button type="button" class="btn btn-sm btn-navy-ums d-none" id="updateAttendanceBtn">
+                    <i class="bi bi-arrow-repeat me-1"></i> Update Existing
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table erp-table">
+                  <thead>
+                    <tr>
+                      <th>Reg. Number</th>
+                      <th>Student Name</th>
+                      <th>Current State</th>
+                      <th>Attendance Status</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rosterTableBody">
+                    <tr>
+                      <td colspan="5" class="text-center text-muted py-4">Click "Load Students" to begin marking attendance.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Records Log -->
+          <div class="tab-pane fade" id="tabRecords" role="tabpanel">
+            <div class="erp-card p-3 mb-4">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                  <label for="recDeptSelect" class="form-label small fw-semibold mb-1">Department</label>
+                  <select id="recDeptSelect" class="form-select"></select>
+                </div>
+                <div class="col-md-2">
+                  <label for="recSemSelect" class="form-label small fw-semibold mb-1">Semester</label>
+                  <select id="recSemSelect" class="form-select">
+                    <option value="">All</option>
+                    <option value="1">Sem 1</option>
+                    <option value="2">Sem 2</option>
+                    <option value="3">Sem 3</option>
+                    <option value="4">Sem 4</option>
+                    <option value="5">Sem 5</option>
+                    <option value="6">Sem 6</option>
+                    <option value="7">Sem 7</option>
+                    <option value="8">Sem 8</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label for="recDateInput" class="form-label small fw-semibold mb-1">Date</label>
+                  <input type="date" id="recDateInput" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label for="recSearchInput" class="form-label small fw-semibold mb-1">Search Student</label>
+                  <input type="text" id="recSearchInput" class="form-control" placeholder="Name or Reg. No..." />
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                  <button type="button" class="btn btn-primary-ums flex-grow-1" id="filterRecordsBtn">Filter</button>
+                  <button type="button" class="btn btn-outline-secondary" id="clearRecordsFilterBtn">Clear</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="erp-card">
+              <div class="erp-card-header">
+                <h2 class="erp-card-title">Recorded Attendance Entries</h2>
+              </div>
+              <div class="table-responsive">
+                <table class="table erp-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Session</th>
+                      <th>Reg. No</th>
+                      <th>Student</th>
+                      <th>Dept / Sem</th>
+                      <th>Status</th>
+                      <th>Marked By</th>
+                      <th class="text-end">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recordsTableBody">
+                    <tr>
+                      <td colspan="8" class="text-center text-muted py-4">Loading attendance records...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Percentage & Reports -->
+          <div class="tab-pane fade" id="tabReport" role="tabpanel">
+            <div class="erp-card p-3 mb-4 no-print">
+              <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                  <label for="repDeptSelect" class="form-label small fw-semibold mb-1">Department</label>
+                  <select id="repDeptSelect" class="form-select"></select>
+                </div>
+                <div class="col-md-2">
+                  <label for="repSemSelect" class="form-label small fw-semibold mb-1">Semester</label>
+                  <select id="repSemSelect" class="form-select">
+                    <option value="">All</option>
+                    <option value="1">Sem 1</option>
+                    <option value="2">Sem 2</option>
+                    <option value="3">Sem 3</option>
+                    <option value="4">Sem 4</option>
+                    <option value="5">Sem 5</option>
+                    <option value="6">Sem 6</option>
+                    <option value="7">Sem 7</option>
+                    <option value="8">Sem 8</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label for="repSearchInput" class="form-label small fw-semibold mb-1">Search Student</label>
+                  <input type="text" id="repSearchInput" class="form-control" placeholder="Name or Reg. No..." />
+                </div>
+                <div class="col-md-4 d-flex justify-content-md-end gap-2">
+                  <button type="button" class="btn btn-primary-ums" id="generateReportBtn">Generate Report</button>
+                  <button type="button" class="btn btn-outline-secondary" id="exportAttendanceCsvBtn">
+                    <i class="bi bi-download me-1"></i> CSV
+                  </button>
+                  <button type="button" class="btn btn-outline-dark" onclick="window.print()">
+                    <i class="bi bi-printer me-1"></i> Print
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-4">
+                <div class="kpi-card">
+                  <div>
+                    <div class="kpi-label">Students Evaluated</div>
+                    <div class="kpi-value tabular-nums" id="repTotalStudents">-</div>
+                  </div>
+                  <div class="kpi-icon"><i class="bi bi-people-fill"></i></div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="kpi-card">
+                  <div>
+                    <div class="kpi-label">Average Attendance</div>
+                    <div class="kpi-value tabular-nums" id="repAvgAttendance">-</div>
+                  </div>
+                  <div class="kpi-icon"><i class="bi bi-percent"></i></div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="kpi-card">
+                  <div>
+                    <div class="kpi-label">Below 75% Threshold</div>
+                    <div class="kpi-value tabular-nums text-danger" id="repBelow75">-</div>
+                  </div>
+                  <div class="kpi-icon text-danger" style="background: var(--ums-danger-bg);"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="erp-card">
+              <div class="erp-card-header">
+                <h2 class="erp-card-title">Student Attendance Percentage Report</h2>
+                <span class="small text-muted">Formula: (Total Present Classes / Total Conducted Classes) &times; 100</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table erp-table">
+                  <thead>
+                    <tr>
+                      <th>Reg. Number</th>
+                      <th>Student Name</th>
+                      <th>Department</th>
+                      <th>Semester</th>
+                      <th>Conducted</th>
+                      <th>Present</th>
+                      <th>Absent</th>
+                      <th>Attendance %</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportTableBody">
+                    <tr>
+                      <td colspan="8" class="text-center text-muted py-4">Loading attendance report...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Edit Single Attendance Record Modal -->
+  <div class="modal fade" id="editAttendanceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <form id="editAttendanceForm">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold" style="color: var(--ums-navy);">Update Attendance</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-grid gap-3">
+            <input type="hidden" id="editAttId" />
+            <div class="small text-muted" id="editAttStudentLabel"></div>
+            <div>
+              <label for="editAttStatus" class="form-label small fw-semibold">Status</label>
+              <select id="editAttStatus" class="form-select" required>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+              </select>
+            </div>
+            <div>
+              <label for="editAttRemarks" class="form-label small fw-semibold">Remarks</label>
+              <input type="text" id="editAttRemarks" class="form-control" maxlength="200" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary-ums">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script src="/js/attendance.js"></script>
+</body>
+</html>
+
